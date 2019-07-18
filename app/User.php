@@ -36,4 +36,20 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Elequent Relationship with Post Model One
+     */
+    public function post(){
+        #if user_id columne name not in post table, then we need to define if
+        //return $this->hasOne('App\Post', 'user_ifanyname_id', 'id');
+        return $this->hasOne('App\Post'); # "user_id" Bydefoult column for relationship
+
+    }
+    /**
+     * one to many relationship
+     */
+    public function posts(){
+        return $this->hasMany('App\Post');
+    }
 }
