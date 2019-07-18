@@ -10,7 +10,11 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+//For Post Model Namespace
 use App\Post;
+//For User Model Namespace
+use App\User;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -99,12 +103,12 @@ Route::get('/basicupdate', function(){
 });
 
 Route::get('/create', function(){
-    $post = Post::create(['title'=>'Create Title by create method 12', 'body'=>'Create Body by posts create mathed', 'is_admin'=>'1']);
+    $post = Post::create(['user_id'=>'1','title'=>'Create Title by create method 3', 'body'=>'Create Body by posts create mathed new 3', 'is_admin'=>'1']);
     return $post;
 });
 
 Route::get('/update-where', function(){
-    $post = Post::where('id', 4)->where('is_admin', 0)->update(['title'=> 'Instructor Laravel 4', 'body'=>'Laravel Instructure is very good 4']);
+    $post = Post::where('id', 4)->where('is_admin', 0)->update(['user_id'=>'1', 'title'=> 'Instructor Laravel 4', 'body'=>'Laravel Instructure is very good 4']);
 });
 
 //Delete
@@ -123,13 +127,57 @@ Route::get('/delete-multiple', function(){
 //Soft Delete
 Route::get('/softdelete', function(){
 
-    Post::find(13)->delete();
+    Post::find(8)->delete();
 });
 
-//Get Soft Deleted
+//Get all with Soft Deleted
 
-Route::get('/readsoftdelete', function(){
+Route::get('/readall', function(){
     //$post = Post::find(13);
-    $post = Post::withTrashed()->where('id',7)->get();
+    //$post = Post::withTrashed()->where('is_admin',0)->get();
+    $post = Post::withTrashed()->get();
     return $post;
+});
+
+//Get not deleted data use post model
+Route::get('/getnotdeleted', function(){
+    $post = Post::where('is_admin', 0)->get();
+    return $post;
+});
+
+Route::get('/onlydeleted', function(){
+    //$post = Post::onlyTrashed()->where('is_admin',0)->get();
+    $post = Post::onlyTrashed()->get();
+    return $post;
+});
+
+//Restore from delete #restoredeleted
+Route::get('/restoredeleted', function(){
+    Post::withTrashed()->where('id', 8)->where('is_admin', 0)->restore();
+});
+
+//Delete permanently from table
+Route::get('/forcedelete', function(){
+    Post::withTrashed()->where('id', 8)->where('is_admin', 0)->forceDelete();
+});
+
+/***
+ * Elequent Relationship for Post Model hasOne
+ ***/
+#one to one relationship
+Route::get('/user/{id}/post', function($id){
+
+    return User::find($id)->post->title;
+
+});
+#User blongs to post
+Route::get('/post/{id}/user', function($id){
+    return Post::find($id)->user;
+});
+#one to many relationship
+Route::get('/postsmany/{id}', function($id=null){
+    $user = User::find($id);
+    foreach($user->posts as $post){
+        echo $post->title."<br/>";
+    }
 });
