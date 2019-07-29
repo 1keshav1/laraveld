@@ -14,9 +14,10 @@
 use App\Post;
 //For User Model Namespace
 use App\User;
-
+Use App\Role;
 Route::get('/', function () {
-    return view('welcome');
+    //return view('welcome');
+    return view('landing');
 });
 
 Route::get('/post', 'PostsController@index');
@@ -166,18 +167,31 @@ Route::get('/forcedelete', function(){
  ***/
 #one to one relationship
 Route::get('/user/{id}/post', function($id){
-
     return User::find($id)->post->title;
-
 });
+
 #User blongs to post
 Route::get('/post/{id}/user', function($id){
     return Post::find($id)->user;
 });
+
 #one to many relationship
 Route::get('/postsmany/{id}', function($id=null){
+    // $posts = User::find($id)->posts;
+    // return $posts;
     $user = User::find($id);
     foreach($user->posts as $post){
         echo $post->title."<br/>";
     }
+});
+
+//Many to Many Relationship
+Route::get('/user/{id}/role', function($id){
+    //$roles = User::find($id)->roles;
+    //echo"<pre>";print_r($roles); echo"</pre>";exit;
+    $roles = User::find($id)->roles()->orderBy('id', 'desc')->get();
+    foreach($roles as $role){
+        echo $role->name."<br/>";
+    }
+    //return var_dump($roles);
 });
