@@ -38,7 +38,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * Elequent Relationship with Post Model One
+     * Elequent Relationship with Post Model one to One relationship
      */
     public function post(){
         #if user_id columne name not in post table, then we need to define if
@@ -51,5 +51,14 @@ class User extends Authenticatable
      */
     public function posts(){
         return $this->hasMany('App\Post');
+    }
+     /**
+     * many to many relationship
+     */
+    public function roles(){
+        //return $this->belongsToMany('App\Role');
+
+        //If custom column Or Table name FK "@nameSpace, @tableName, @columnName, @columnName"
+        return $this->belongsToMany('App\Role', 'role_user', 'user_id', 'role_id')->withPivot('created_at');
     }
 }
