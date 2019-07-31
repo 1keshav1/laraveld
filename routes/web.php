@@ -15,6 +15,7 @@ use App\Post;
 //For User Model Namespace
 use App\User;
 Use App\Role;
+Use App\Country;
 Route::get('/', function () {
     //return view('welcome');
     return view('landing');
@@ -194,4 +195,21 @@ Route::get('/user/{id}/role', function($id){
         echo $role->name."<br/>";
     }
     //return var_dump($roles);
+});
+
+//Accessing the intermediate table or pivot table
+Route::get('user/pivot/{id}', function($id){
+    $user = User::find($id);
+    return $user->roles;
+/*     foreach($user->roles as $role){
+        return $role->pivot;
+    } */
+});
+
+//By Has Many Through Relation
+Route::get('user/country/{id}', function($id){
+    $country = Country::find($id);
+    foreach($country->posts as $post){
+        echo $post->title;
+    }
 });
