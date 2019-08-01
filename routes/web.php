@@ -213,3 +213,12 @@ Route::get('user/country/{id}', function($id){
         echo $post->title;
     }
 });
+//Many
+Route::get('user/photos/{id}', function($id){
+  $user = User::find($id);
+  //return $user->photos;
+    foreach($user->photos as $photo){
+        return $photo;
+    }
+
+});
