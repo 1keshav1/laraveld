@@ -26,4 +26,10 @@ class Post extends Model
         return $this->belongsTo('App\User');
     }
 
+    //Poly
+
+    public function photos(){
+        return $this->morphMany('App\Photo', 'imageable');
+    }
+
 }

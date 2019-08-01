@@ -61,4 +61,12 @@ class User extends Authenticatable
         //If custom column Or Table name FK "@nameSpace, @tableName, @columnName, @columnName"
         return $this->belongsToMany('App\Role', 'role_user', 'user_id', 'role_id')->withPivot('created_at');
     }
+//Belongs to
+    public function user(){
+        return $this->belongsTo('App\User');
+    }
+    //Poly
+    public function photos(){
+        return $this->morphMany('App\Photo', 'imageable');
+    }
 }
